@@ -19,10 +19,9 @@ test_that("BayesianSSMforAS runs without error", {
   opts <- jaspTools::analysisOptions(jaspFile)
   dataset <- jaspTools::extractDatasetFromJASPFile(jaspFile)
 
-  # Encode and run analysis
-  encoded <- jaspTools:::encodeOptionsAndDataset(opts, dataset)
+  # Run analysis
   set.seed(1)
-  results <- jaspTools::runAnalysis("BayesianSSMforAS", encoded$dataset, encoded$options, encodedDataset = TRUE)
+  results <- jaspTools::runAnalysis("BayesianSSMforAS", dataset, opts)
 
   # Check analysis runs without error
   expect_false(isTRUE(results[["status"]] == "error"),

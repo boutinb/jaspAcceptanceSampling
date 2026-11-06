@@ -86,6 +86,15 @@ bayesianSSMforASInternal <- function(jaspResults, dataset = NULL, options) {
     dataset <- .readDataSetToEnd(columns.as.numeric = colsNumeric)
   }
 
+  # A preloaded dataset gives an ordinal or nominal column (e.g. an integer Lot Number) as a factor:
+  # use the values of its labels, not the factor codes.
+  if (!is.null(dataset)) {
+    for (col in intersect(colsNumeric, colnames(dataset))) {
+      if (is.factor(dataset[[col]]))
+        dataset[[col]] <- suppressWarnings(as.numeric(as.character(dataset[[col]])))
+    }
+  }
+
   if (!is.null(dataset) && options[["ssm_time"]] != "" && options[["ssm_time"]] %in% colnames(dataset)) {
     dataset <- dataset[order(dataset[[options[["ssm_time"]]]]), , drop = FALSE]
   }
