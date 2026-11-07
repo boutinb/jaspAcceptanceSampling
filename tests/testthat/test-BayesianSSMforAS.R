@@ -35,7 +35,7 @@ test_that("BayesianSSMforAS - analysis uses time-sorted data", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("summaryTable" %in% names(results$results))
   expect_equal(results$results$summaryTable$data[[1]]$t, 30)
   expect_equal(results$results$summaryTable$data[[1]]$y, 3)
@@ -86,7 +86,7 @@ test_that("BayesianSSMforAS - summary table is generated", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("summaryTable" %in% names(results$results))
 
   summaryRows <- results$results$summaryTable$data
@@ -178,7 +178,7 @@ test_that("BayesianSSMforAS - invalid lot inputs fail gracefully before Stan", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("placeholder" %in% names(results$results))
   expect_false("summaryTable" %in% names(results$results))
 })
@@ -220,7 +220,7 @@ test_that("BayesianSSMforAS - constant predictor fails gracefully before Stan", 
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("placeholder" %in% names(results$results))
   expect_false("summaryTable" %in% names(results$results))
 })
