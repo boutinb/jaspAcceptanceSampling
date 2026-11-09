@@ -1,0 +1,2 @@
+configure text eol=lf
+configure.win text eol=lf

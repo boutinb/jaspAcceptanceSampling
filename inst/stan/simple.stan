@@ -1,52 +1,67 @@
-data {
-  int<lower=1> T;             // number of time points
-  array[T] int<lower=0> s;    // total size of each lot
-  array[T] int<lower=0> n;    // number of sampled items
-  array[T] int<lower=0> y;    // observed defects in sample
-
-  // Hyperparameters for priors
-  real<lower=0> prior_theta1_a;   // Beta(alpha) for theta1
-  real<lower=0> prior_theta1_b;   // Beta(beta)  for theta1
-  real<lower=0> prior_sigma_sd;   // SD for (half-)normal prior on sigma_eta
+functions {
+  real normal_mixture_transport(real z, real sigma, data real q, data real extra);
 }
-
+data {
+  int<lower=1> T;
+  array[T] int<lower=0> s;
+  array[T] int<lower=0> n;
+  array[T] int<lower=0> y;
+  real<lower=0> prior_theta1_a;
+  real<lower=0> prior_theta1_b;
+  real<lower=0> prior_sigma_sd;
+}
+transformed data {
+  real jump_probability = 0.05;
+  real jump_extra_sd = 1.5;
+  if (prior_theta1_a <= 0 || prior_theta1_b <= 0 ||
+      is_inf(prior_theta1_a) || is_inf(prior_theta1_b) ||
+      is_nan(prior_theta1_a) || is_nan(prior_theta1_b))
+    reject("Initial Beta prior shapes must be finite and strictly positive");
+  for (t in 1:T)
+    if (y[t] > n[t] || n[t] > s[t]) reject("Require y <= n <= s");
+}
 parameters {
-  // Initial defect rate on probability scale
-  real<lower=0, upper=1> theta1;
-
-  // Scale of day-to-day innovations (constrained > 0)
+  real mu1; // initial baseline log odds
   real<lower=0> sigma_eta;
-
-  // Non-centered innovations
   vector[T-1] z_raw;
 }
-
 transformed parameters {
+  real<lower=0, upper=1> theta1 = inv_logit(mu1);
+  vector[T-1] eta;
   vector[T] mu;
   vector[T] theta;
-  vector[T-1] eta;
 
-  eta = sigma_eta * z_raw;
-
-  mu[1] = logit(theta1);
-  mu[2:T] = mu[1] + cumulative_sum(eta);
-
+  if (T > 1)
+    for (t in 1:(T-1))
+      eta[t] = normal_mixture_transport(z_raw[t], sigma_eta,
+                                        jump_probability, jump_extra_sd);
+  mu[1] = mu1;
+  if (T > 1) mu[2:T] = mu[1] + cumulative_sum(eta);
   theta = inv_logit(mu);
 }
-
 model {
-
-  theta1   ~ beta(prior_theta1_a, prior_theta1_b);  // default 1,1 in JASP
-  sigma_eta ~ normal(0, prior_sigma_sd);            // with <lower=0>, this is half-normal
-  z_raw    ~ normal(0, 1);
-
-  y ~ binomial(n, theta);
+  // Beta prior on inv_logit(mu1), including its transformation Jacobian.
+  // Combining the log terms avoids rounding theta1 to 0/1 inside the target.
+  // The Beta normalizing constant depends only on the supplied prior shapes.
+  target += prior_theta1_a * log_inv_logit(mu1)
+            + prior_theta1_b * log1m_inv_logit(mu1);
+  sigma_eta ~ normal(0, prior_sigma_sd);
+  z_raw ~ std_normal();
+  // Binomial log likelihood, omitting only the data-dependent coefficients.
+  // Stable log probabilities also cover logits whose inverse rounds to 0/1.
+  for (t in 1:T)
+    target += y[t] * log_inv_logit(mu[t])
+              + (n[t] - y[t]) * log1m_inv_logit(mu[t]);
 }
-
 generated quantities {
-  int y_pred; // predicted total defects in the last lot
+  int y_pred = y[T] + binomial_rng(s[T] - n[T], theta[T]);
+  vector[T-1] jump_responsibility;
 
-  // Predict total defects in lot T:
-  // observed defects + random draw for remaining items
-  y_pred = y[T] + binomial_rng(s[T] - n[T], theta[T]);
+  if (T > 1)
+    for (t in 1:(T-1)) {
+      real broad = log(jump_probability)
+                   + normal_lpdf(eta[t] | 0, sqrt(square(sigma_eta) + square(jump_extra_sd)));
+      real regular = log1m(jump_probability) + normal_lpdf(eta[t] | 0, sigma_eta);
+      jump_responsibility[t] = exp(broad - log_sum_exp(broad, regular));
+    }
 }

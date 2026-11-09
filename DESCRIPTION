@@ -1,7 +1,7 @@
 Package: jaspAcceptanceSampling
 Type: Package
 Title: Lot sampling for acceptance/rejection of lots
-Version: 0.96.4
+Version: 0.96.5
 Date: 2022-09-12
 Author: JASP Team
 Website: jasp-stats.org
@@ -23,7 +23,7 @@ Imports:
   Rcpp (>= 0.12.0),
   RcppParallel (>= 5.0.1),
   rlang,
-  rstan (>= 2.18.1),
+  rstan (>= 2.32.7),
   rstantools (>= 2.5.0),
   stringr,
   vcd,
@@ -35,8 +35,8 @@ LinkingTo:
   Rcpp (>= 0.12.0),
   RcppEigen (>= 0.3.3.3.0),
   RcppParallel (>= 5.0.1),
-  rstan (>= 2.18.1),
-  StanHeaders (>= 2.18.0)
+  rstan (>= 2.32.7),
+  StanHeaders (>= 2.32.10)
 SystemRequirements: GNU make
 Biarch: true
 Remotes:
