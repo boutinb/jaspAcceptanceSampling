@@ -3,80 +3,81 @@
 test_that("Bayesian sampling - planning table is generated", {
   options <- jaspTools::analysisOptions("BayesianSampling")
 
-  options$showPlansplan <- TRUE
-  options$priorPlotplan <- FALSE
-  options$showThreeBFplan <- FALSE
-  options$inferPosteriorinfer <- FALSE
+  options$planningPlanTable <- TRUE
+  options$planningPriorPlot <- FALSE
+  options$planningThreeHypothesisBayesFactorTable <- FALSE
+  options$inferencePosterior <- FALSE
 
   results <- jaspTools::runAnalysis("BayesianSampling", "test.csv", options)
 
-  plan_table <- results[["results"]][["planContainer"]][["collection"]][["planContainer_planTable"]][["data"]]
+  planTable <- results[["results"]][["planContainer"]][["collection"]][["planContainer_planTable"]][["data"]]
 
-  expect_true(length(plan_table) >= 3)
+  expect_true(length(planTable) >= 3)
 
-  expect_equal(plan_table[[1]]$c, 0)
-  expect_equal(plan_table[[1]]$n, 19)
-  expect_equal(round(plan_table[[1]]$prior_p, 4), 0.5)
-  expect_equal(round(plan_table[[1]]$post_p, 4), 0.9708)
-  expect_equal(round(plan_table[[1]]$bf_odds, 4), 33.2465)
+  expect_equal(planTable[[1]]$c, 0)
+  expect_equal(planTable[[1]]$n, 19)
+  expect_equal(round(planTable[[1]]$prior_p, 4), 0.5)
+  expect_equal(round(planTable[[1]]$post_p, 4), 0.9708)
+  expect_equal(round(planTable[[1]]$bf_odds, 4), 33.2465)
 
-  expect_equal(plan_table[[2]]$c, 1)
-  expect_equal(plan_table[[2]]$n, 30)
-  expect_equal(round(plan_table[[2]]$prior_p, 4), 0.5)
-  expect_equal(round(plan_table[[2]]$post_p, 4), 0.9690)
-  expect_equal(round(plan_table[[2]]$bf_odds, 4), 31.2231)
+  expect_equal(planTable[[2]]$c, 1)
+  expect_equal(planTable[[2]]$n, 30)
+  expect_equal(round(planTable[[2]]$prior_p, 4), 0.5)
+  expect_equal(round(planTable[[2]]$post_p, 4), 0.9690)
+  expect_equal(round(planTable[[2]]$bf_odds, 4), 31.2231)
 
-  expect_equal(plan_table[[3]]$c, 2)
-  expect_equal(plan_table[[3]]$n, 40)
-  expect_equal(round(plan_table[[3]]$prior_p, 4), 0.5)
-  expect_equal(round(plan_table[[3]]$post_p, 4), 0.9678)
-  expect_equal(round(plan_table[[3]]$bf_odds, 4), 30.0741)
+  expect_equal(planTable[[3]]$c, 2)
+  expect_equal(planTable[[3]]$n, 40)
+  expect_equal(round(planTable[[3]]$prior_p, 4), 0.5)
+  expect_equal(round(planTable[[3]]$post_p, 4), 0.9678)
+  expect_equal(round(planTable[[3]]$bf_odds, 4), 30.0741)
 })
 
 
 test_that("Bayesian sampling - inference decision table is generated", {
   options <- jaspTools::analysisOptions("BayesianSampling")
 
-  options$showPlansplan <- FALSE
-  options$priorPlotplan <- FALSE
-  options$showThreeBFplan <- FALSE
+  options$planningPlanTable <- FALSE
+  options$planningPriorPlot <- FALSE
+  options$planningThreeHypothesisBayesFactorTable <- FALSE
 
-  options$inferPosteriorinfer <- TRUE
-  options$showInferenceTableinfer <- TRUE
-  options$posteriorPlotinfer <- FALSE
-  options$ppdPlotinfer <- FALSE
+  options$inferencePosterior <- TRUE
+  options$inferenceDecisionTable <- TRUE
+  options$inferencePosteriorPlot <- FALSE
+  options$inferencePosteriorPredictivePlot <- FALSE
 
   results <- jaspTools::runAnalysis("BayesianSampling", "test.csv", options)
 
-  inf_table <- results[["results"]][["infContainer"]][["collection"]][["infContainer_inferenceDecisionTable"]][["data"]]
+  infTable <- results[["results"]][["infContainer"]][["collection"]][["infContainer_inferenceDecisionTable"]][["data"]]
 
-  expect_equal(length(inf_table), 8)
-  jaspTools::expect_equal_tables(inf_table[[1]], list("Sample Size (n)", "30"))
-  jaspTools::expect_equal_tables(inf_table[[2]], list("Defects (d)", "0"))
-  expect_equal(inf_table[[3]]$col_1, "AQL")
-  expect_equal(as.numeric(inf_table[[3]]$col_2), 0.05)
-  expect_equal(inf_table[[4]]$col_1, "RQL")
-  expect_equal(as.numeric(inf_table[[4]]$col_2), 0.15)
-  expect_equal(inf_table[[5]]$col_1, "Bayes Factor")
-  expect_equal(as.numeric(inf_table[[5]]$col_2), 188.832, tolerance = 1e-6)
-  expect_equal(as.numeric(inf_table[[6]]$col_2), 0.889, tolerance = 1e-6)
-  expect_equal(as.numeric(inf_table[[7]]$col_2), 0.110, tolerance = 1e-6)
-  expect_equal(as.numeric(inf_table[[8]]$col_2), 0.001, tolerance = 1e-6)
+  expect_equal(length(infTable), 9)
+  jaspTools::expect_equal_tables(infTable[[1]], list("Sample Size (n)", "30"))
+  jaspTools::expect_equal_tables(infTable[[2]], list("Defectives (d)", "0"))
+  jaspTools::expect_equal_tables(infTable[[3]], list("Acceptance Number (c)", "1"))
+  expect_equal(infTable[[4]]$col_1, "AQL")
+  expect_equal(as.numeric(infTable[[4]]$col_2), 0.05)
+  expect_equal(infTable[[5]]$col_1, "RQL")
+  expect_equal(as.numeric(infTable[[5]]$col_2), 0.15)
+  expect_equal(infTable[[6]]$col_1, "Bayes Factor")
+  expect_equal(as.numeric(infTable[[6]]$col_2), 188.832, tolerance = 1e-6)
+  expect_equal(as.numeric(infTable[[7]]$col_2), 0.889, tolerance = 1e-6)
+  expect_equal(as.numeric(infTable[[8]]$col_2), 0.110, tolerance = 1e-6)
+  expect_equal(as.numeric(infTable[[9]]$col_2), 0.001, tolerance = 1e-6)
 })
 
 test_that("Bayesian sampling - invalid impartial prior fails gracefully", {
   options <- jaspTools::analysisOptions("BayesianSampling")
 
-  options$showPlansplan <- TRUE
-  options$priorPlotplan <- FALSE
-  options$showThreeBFplan <- FALSE
-  options$inferPosteriorinfer <- FALSE
+  options$planningPlanTable <- TRUE
+  options$planningPriorPlot <- FALSE
+  options$planningThreeHypothesisBayesFactorTable <- FALSE
+  options$inferencePosterior <- FALSE
 
-  options$aqlplan <- 0.5
-  options$rqlplan <- 0.9
-  options$priorplan <- "impartial"
-  options$impartialCustomModeplan <- TRUE
-  options$impartialModeplan <- 0.8
+  options$planningAcceptableQualityLevel <- 0.5
+  options$planningRejectableQualityLevel <- 0.9
+  options$planningPriorDistribution <- "impartial"
+  options$planningPriorImpartialCustomLocation <- TRUE
+  options$planningPriorImpartialLocation <- 0.8
 
   results <- jaspTools::runAnalysis("BayesianSampling", "test.csv", options)
 
@@ -89,8 +90,8 @@ test_that("Bayesian sampling - extreme custom prior values do not crash plan gen
   plans <- jaspAcceptanceSampling:::.bsGeneratePlans(
     aql = 0.05,
     rql = 0.10,
-    max_n = 5,
-    min_bf = 30,
+    maximumSampleSize = 5,
+    minimumBayesFactor = 30,
     alpha = 100000,
     beta = 100000
   )
@@ -99,12 +100,12 @@ test_that("Bayesian sampling - extreme custom prior values do not crash plan gen
 })
 
 test_that("Bayesian sampling - uniform prior ignores stale custom mode values", {
-  priorParams <- jaspAcceptanceSampling:::.bsCalculatePriorParams(
+  priorParams <- jaspAcceptanceSampling:::.bsCalculatePriorParameters(
     prior = "uniform",
     aql = 0.05,
     rql = 0.10,
-    impartialCustomMode = TRUE,
-    impartialMode = 0.50
+    impartialCustomLocation = TRUE,
+    impartialLocation = 0.50
   )
 
   expect_equal(priorParams$alpha, 1)
@@ -112,7 +113,7 @@ test_that("Bayesian sampling - uniform prior ignores stale custom mode values", 
 })
 
 test_that("Bayesian sampling - posterior predictive x-axis covers full support", {
-  xScale <- jaspAcceptanceSampling:::.bsPPDXScale(0:67)
+  xScale <- jaspAcceptanceSampling:::.bsCreatePredictiveXAxisScale(0:67)
 
   expect_true(all(diff(xScale$breaks) >= 0))
   expect_lte(xScale$limits[1], 0)
@@ -120,7 +121,7 @@ test_that("Bayesian sampling - posterior predictive x-axis covers full support",
 })
 
 test_that("Bayesian sampling - y-axis scale covers the full plotted range", {
-  yScale <- jaspAcceptanceSampling:::.bsYScale(c(0, 12.5))
+  yScale <- jaspAcceptanceSampling:::.bsCreateYAxisScale(c(0, 12.5))
 
   expect_true(all(diff(yScale$breaks) >= 0))
   expect_equal(yScale$limits[1], 0)
@@ -130,13 +131,13 @@ test_that("Bayesian sampling - y-axis scale covers the full plotted range", {
 
 test_that("Bayesian sampling - off-range predictive thresholds are hidden", {
   expect_null(
-    jaspAcceptanceSampling:::.bsVisibleThreshold(
+    jaspAcceptanceSampling:::.bsCreateVisibleThreshold(
       x = 10,
       label = "AQL",
       side = "left",
       lower = 39.5,
       upper = 95.5,
-      min_offset = 0.75
+      minimumOffset = 0.75
     )
   )
 })
@@ -147,14 +148,14 @@ test_that("Bayesian sampling - errored containers are refreshed before reuse", {
   refreshed <- jaspAcceptanceSampling:::.bsReuseOrRefreshContainer(
     staleContainer,
     "Planning",
-    jaspAcceptanceSampling:::.bsPlanningDeps()
+    jaspAcceptanceSampling:::.bsGetPlanningDependencies()
   )
 
   cleanContainer <- list(getError = function() FALSE)
   reused <- jaspAcceptanceSampling:::.bsReuseOrRefreshContainer(
     cleanContainer,
     "Planning",
-    jaspAcceptanceSampling:::.bsPlanningDeps()
+    jaspAcceptanceSampling:::.bsGetPlanningDependencies()
   )
 
   expect_false(identical(refreshed, staleContainer))
@@ -164,14 +165,14 @@ test_that("Bayesian sampling - errored containers are refreshed before reuse", {
 test_that("Bayesian sampling - plot outputs are generated", {
   options <- jaspTools::analysisOptions("BayesianSampling")
 
-  options$showPlansplan <- FALSE
-  options$priorPlotplan <- TRUE
-  options$showThreeBFplan <- FALSE
+  options$planningPlanTable <- FALSE
+  options$planningPriorPlot <- TRUE
+  options$planningThreeHypothesisBayesFactorTable <- FALSE
 
-  options$inferPosteriorinfer <- TRUE
-  options$showInferenceTableinfer <- FALSE
-  options$posteriorPlotinfer <- TRUE
-  options$ppdPlotinfer <- TRUE
+  options$inferencePosterior <- TRUE
+  options$inferenceDecisionTable <- FALSE
+  options$inferencePosteriorPlot <- TRUE
+  options$inferencePosteriorPredictivePlot <- TRUE
 
   results <- jaspTools::runAnalysis("BayesianSampling", "test.csv", options)
 
@@ -187,33 +188,33 @@ test_that("Bayesian sampling - plot outputs are generated", {
 test_that("Bayesian sampling - three-hypothesis probabilities remain a valid partition", {
   options <- jaspTools::analysisOptions("BayesianSampling")
 
-  options$showPlansplan <- FALSE
-  options$priorPlotplan <- FALSE
-  options$showThreeBFplan <- TRUE
-  options$inferPosteriorinfer <- FALSE
-  options$priorplan <- "impartial_three"
-  options$aqlplan <- 0.05
-  options$rqlplan <- 0.15
+  options$planningPlanTable <- FALSE
+  options$planningPriorPlot <- FALSE
+  options$planningThreeHypothesisBayesFactorTable <- TRUE
+  options$inferencePosterior <- FALSE
+  options$planningPriorDistribution <- "impartialThreeRegion"
+  options$planningAcceptableQualityLevel <- 0.05
+  options$planningRejectableQualityLevel <- 0.15
 
   results <- jaspTools::runAnalysis("BayesianSampling", "test.csv", options)
 
   expect_equal(results$status, "complete")
 
-  three_bf_table <- results[["results"]][["planContainer"]][["collection"]][["planContainer_threeBFTable"]][["data"]]
-  expect_true(length(three_bf_table) >= 1)
+  threeBfTable <- results[["results"]][["planContainer"]][["collection"]][["planContainer_threeBFTable"]][["data"]]
+  expect_true(length(threeBfTable) >= 1)
 
-  first_row <- three_bf_table[[1]]
+  firstRow <- threeBfTable[[1]]
   expect_equal(
-    as.numeric(first_row$prior_good) + as.numeric(first_row$prior_middle) + as.numeric(first_row$prior_bad),
+    as.numeric(firstRow$prior_good) + as.numeric(firstRow$prior_middle) + as.numeric(firstRow$prior_bad),
     1,
     tolerance = 1e-10
   )
   expect_equal(
-    as.numeric(first_row$post_good) + as.numeric(first_row$post_middle) + as.numeric(first_row$post_bad),
+    as.numeric(firstRow$post_good) + as.numeric(firstRow$post_middle) + as.numeric(firstRow$post_bad),
     1,
     tolerance = 1e-10
   )
-  expect_true(is.finite(as.numeric(first_row$BF_GB)))
-  expect_true(is.finite(as.numeric(first_row$BF_GM)))
-  expect_true(is.finite(as.numeric(first_row$BF_MB)))
+  expect_true(is.finite(as.numeric(firstRow$BF_GB)))
+  expect_true(is.finite(as.numeric(firstRow$BF_GM)))
+  expect_true(is.finite(as.numeric(firstRow$BF_MB)))
 })
