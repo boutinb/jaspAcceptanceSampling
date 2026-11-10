@@ -140,7 +140,7 @@
     },
     "RcppParallel": {
       "Package": "RcppParallel",
-      "Version": "5.1.11-1",
+      "Version": "6.2.1",
       "Source": "Repository",
       "Requirements": [
         "R"
@@ -885,7 +885,7 @@
     },
     "later": {
       "Package": "later",
-      "Version": "1.4.5",
+      "Version": "1.4.8",
       "Source": "Repository",
       "Requirements": [
         "R",

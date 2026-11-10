@@ -35,7 +35,7 @@ test_that("BayesianSSMforAS - analysis uses time-sorted data", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options, view = FALSE)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("summaryTable" %in% names(results$results))
   expect_equal(results$results$summaryTable$data[[1]]$t, "30")
   expect_equal(results$results$summaryTable$data[[1]]$y, 3)
@@ -97,7 +97,7 @@ test_that("BayesianSSMforAS - an empty predictor selects the base model", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options, view = FALSE)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("summaryTable" %in% names(results$results))
   expect_false("betaPlot" %in% names(results$results))
   parameters <- vapply(results$results$mcmcSummary$data, function(row) row$parameter, character(1))
@@ -192,7 +192,7 @@ test_that("BayesianSSMforAS - invalid lot inputs fail gracefully before Stan", {
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options, view = FALSE)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("placeholder" %in% names(results$results))
   expect_identical(results$results$placeholder$status, "error")
   expect_match(results$results$placeholder$error$errorMessage, "defects cannot exceed")
@@ -235,7 +235,7 @@ test_that("BayesianSSMforAS - constant predictor fails gracefully before Stan", 
 
   results <- jaspTools::runAnalysis("BayesianSSMforAS", csvPath, options, view = FALSE)
 
-  expect_equal(results$status, "complete")
+  expect_equal(results$status, "complete", info = results$results$errorMessage)
   expect_true("placeholder" %in% names(results$results))
   expect_identical(results$results$placeholder$status, "error")
   expect_match(results$results$placeholder$error$errorMessage, "must vary")
