@@ -5,7 +5,7 @@ Create Attribute Plan
 ## Input
 -------
 ## Options
-- **Lot size (N)**: total number of items in the lot. Note that if hypergeometric distribution is specified, the proportion of non-conforming items * N gives the number of non-conforming items, which must all be non-negative integers.
+- **Lot size (N)**: total number of items in the lot. A generated sample cannot exceed this size. If it does, the analysis reports an error; review the quality constraints or consider a suitable finite-lot sampling design. The sample size is not automatically reduced, because that would change the plan's acceptance probabilities. Note that if hypergeometric distribution is specified, the proportion of non-conforming items * N gives the number of non-conforming items, which must all be non-negative integers.
 - **Quality Constraints**: user-specified constraints associated with AQL and RQL.
  - *Acceptable quality level (AQL)*: the smallest proportion of non-conforming items that makes the lot definitely acceptable.
  - *Rejectable quality level (RQL / LTPD)*: the proportion of non-conforming items in the lot that is unacceptable to the consumer.
