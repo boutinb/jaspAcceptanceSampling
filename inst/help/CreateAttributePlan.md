@@ -30,7 +30,7 @@ Create Attribute Plan
 - **Basic sampling tables**: shows the tables of the generated attribute plan, and of the acceptance and rejection probabilities at AQL and RQL.
 - **Summary table**: shows the acceptance probabilities at every point in the quality level range.
 - **OC curve**: plots the operating characteristics of the plan.
-- **AOQ curve**: plots the outgoing quality levels against the incoming quality levels, for a plan with rectification.
+- **AOQ curve**: plots the outgoing quality levels against the incoming quality levels, for a plan with rectification. For hypergeometric plans, AOQ and the displayed AOQL are finite-lot approximations: the calculation uses the incoming proportion non-conforming for the uninspected items. In a fixed finite lot, acceptance can change the expected proportion among those items. The approximation may be inaccurate when the inspected sample is a large fraction of the lot. This limitation also applies to multiple-stage plans; the output is not an exact finite-lot expected remaining-defect calculation.
 - **ATI curve**: plots the average number of items inspected against the incoming quality levels, for a plan with rectification.
 
 ## References 

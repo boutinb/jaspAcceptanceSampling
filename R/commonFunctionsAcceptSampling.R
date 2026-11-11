@@ -446,7 +446,20 @@ getAOQCurve <- function(jaspContainer, pos, depend_vars, df_plan, options, type,
   }
   aoqCurve <- createJaspPlot(title = gettext("AOQ (Average Outgoing Quality) Curve"), width = 480, height = 320)
   aoqCurve$dependOn(dependencies)
+  aoqCurve$position <- pos
   jaspContainer[["aoqCurve"]] <- aoqCurve
+
+  # This shared helper also handles variable plans, which have no distribution option.
+  if (identical(options[[.getPlanOptionNames("distribution", type)]], "hypergeometric")) {
+    aoqCurve$title <- gettext("AOQ (Average Outgoing Quality) Curve — Approximation")
+    approximationText <- paste(
+      gettext("Finite-lot approximation: AOQ and AOQL use the incoming proportion non-conforming for uninspected items."),
+      gettext("For a fixed finite lot, acceptance can change the expected proportion among those items."),
+      gettext("The approximation may be inaccurate when the sample is a large fraction of the lot."),
+      gettext("This is not an exact finite-lot calculation, including for multiple-stage plans."))
+    jaspContainer[["aoqApproximation"]] <- createJaspHtml(
+      text = approximationText, position = pos + 0.1, dependencies = dependencies)
+  }
 
   N <- options[[.getPlanOptionNames("lotSize", type)]]
   pd <- planData$PD
@@ -496,7 +509,6 @@ getAOQCurve <- function(jaspContainer, pos, depend_vars, df_plan, options, type,
          ggplot2::scale_y_continuous(breaks = yBreaks, limits = range(yBreaks))
         # ggplot2::ylim(0.0,round(aoql*1.2, 2))
   plt <- plt + jaspGraphs::geom_rangeframe() + jaspGraphs::themeJaspRaw()
-  plt$position <- pos
   aoqCurve$plotObject <- plt
 }
 
