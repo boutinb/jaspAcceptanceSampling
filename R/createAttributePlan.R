@@ -111,15 +111,26 @@ CreateAttributePlan <- function(jaspResults, dataset = NULL, options, ...) {
   if (dist == "hypergeom") {
     # Need to provide the lot size (N) for hypergeometric distribution.
     planValues <- AcceptanceSampling::find.plan(PRP = c(aql, producerAcceptanceProbability), CRP = c(rql, consumerAcceptanceProbability), type = dist, N = options$lotSize)
-    plan <- AcceptanceSampling::OC2c(N = options$lotSize, n = planValues$n, c = planValues$c, r = planValues$r, type = dist, pd = pd)
   } else {
     # Binomial and Poisson distributions don't require lot size (N) or standard deviation.
     planValues <- AcceptanceSampling::find.plan(PRP = c(aql, producerAcceptanceProbability), CRP = c(rql, consumerAcceptanceProbability), type = dist)
-    plan <- AcceptanceSampling::OC2c(n = planValues$n, c = planValues$c, r = planValues$r, type = dist, pd = pd)
   }
   n <- planValues$n
   c <- planValues$c
   r <- planValues$r
+
+  if (n > options[["lotSize"]]) {
+    jaspContainer$setError(gettextf(
+      "The generated sample size (%1$d) exceeds the lot size (%2$d). Review the plan settings or sampling design.",
+      n, options[["lotSize"]]))
+    return()
+  }
+
+  if (dist == "hypergeom") {
+    plan <- AcceptanceSampling::OC2c(N = options[["lotSize"]], n = n, c = c, r = r, type = dist, pd = pd)
+  } else {
+    plan <- AcceptanceSampling::OC2c(n = n, c = c, r = r, type = dist, pd = pd)
+  }
 
   planData <- data.frame(PD = pd, PA = plan@paccept)
   planData <- na.omit(planData)
