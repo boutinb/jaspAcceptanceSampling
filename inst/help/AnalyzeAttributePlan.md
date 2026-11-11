@@ -36,7 +36,7 @@ Analyze Attribute Plan
 -------
 - **Summary table**: shows the acceptance probabilities at every point in the quality level range.
 - **OC curve**: plots the operating characteristics of the plan.
-- **AOQ curve**: plots the outgoing quality levels against the incoming quality levels, for a plan with rectification.
+- **AOQ curve**: plots the outgoing quality levels against the incoming quality levels, for a plan with rectification. For hypergeometric plans, AOQ and AOQL are approximations that can be too low when the sample is a large fraction of the lot.
 - **ATI curve**: plots the average number of items inspected against the incoming quality levels, for a plan with rectification.
 - **ASN curve**: (only for multiple stage plans) plots the average number of items inspected to arrive at a decision on the lot, against the incoming quality levels.
 
