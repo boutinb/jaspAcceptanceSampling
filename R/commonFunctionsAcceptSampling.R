@@ -405,8 +405,6 @@ getOCCurve <- function(jaspContainer, pos, depend_vars, df_plan) {
   if (!is.null(jaspContainer[["ocCurve"]])) {
     return()
   }
-  planData$PD <- round(planData$PD, 3)
-  planData$PA <- round(planData$PA, 3)
   ocCurve <- createJaspPlot(title = gettext("OC (Operating Characteristics) Curve"),  width = 480, height = 320)
   ocCurve$dependOn(dependencies)
   xBreaks <- jaspGraphs::getPrettyAxisBreaks(c(min(planData$PD), max(planData$PD)))
@@ -415,7 +413,9 @@ getOCCurve <- function(jaspContainer, pos, depend_vars, df_plan) {
                   ggplot2::geom_point(colour = "black", shape = 19) +
                   ggplot2::geom_line(colour = "black", linetype = "dashed") +
                   ggplot2::labs(x = gettext("Proportion Non-conforming"), y = gettext("Probability of Acceptance")) +
-                  ggplot2::scale_x_continuous(breaks = xBreaks, limits = range(xBreaks)) +
+                  ggplot2::scale_x_continuous(breaks = xBreaks, limits = range(xBreaks),
+                    expand = ggplot2::expansion(mult = c(.05, .1)),
+                    guide = ggplot2::guide_axis(check.overlap = TRUE)) +
                   ggplot2::scale_y_continuous(breaks = yBreaks, limits = range(yBreaks))
   plt <- plt + jaspGraphs::geom_rangeframe() + jaspGraphs::themeJaspRaw()
   ocCurve$plotObject <- plt
@@ -486,9 +486,7 @@ getAOQCurve <- function(jaspContainer, pos, depend_vars, df_plan, options, type,
     # This part is common for every stage, so do it at the end.
     AOQ <- AOQ * pd / N
   }
-  AOQ <- round(AOQ, 3)
   planData$AOQ <- AOQ
-  planData$PD <- round(planData$PD, 3)
   planData <- na.omit(planData)
   if (nrow(planData) == 0) {
     jaspContainer$setError(gettext("No valid values found in the plan. Check the inputs."))
@@ -503,9 +501,11 @@ getAOQCurve <- function(jaspContainer, pos, depend_vars, df_plan, options, type,
          ggplot2::geom_point(colour = "black", shape = 19) + ggplot2::labs(x = gettext("(Incoming) Proportion Non-conforming"), y = gettext("Average Outgoing Quality")) +
          ggplot2::geom_line(colour = "black", linetype = "dashed") +
          ggplot2::geom_hline(yintercept = aoql, linetype = "dotted") +
-         ggplot2::annotate("text", label = gettextf("AOQL: %.3f", aoql),
+         ggplot2::annotate("text", label = gettextf("AOQL: %.3g", aoql),
                            x = (min(planData$PD) + max(planData$PD)) / 2, y = aoql*1.1, color = "black", size = 6) +
-         ggplot2::scale_x_continuous(breaks = xBreaks, limits = range(xBreaks)) +
+         ggplot2::scale_x_continuous(breaks = xBreaks, limits = range(xBreaks),
+                    expand = ggplot2::expansion(mult = c(.05, .1)),
+                    guide = ggplot2::guide_axis(check.overlap = TRUE)) +
          ggplot2::scale_y_continuous(breaks = yBreaks, limits = range(yBreaks))
         # ggplot2::ylim(0.0,round(aoql*1.2, 2))
   plt <- plt + jaspGraphs::geom_rangeframe() + jaspGraphs::themeJaspRaw()
