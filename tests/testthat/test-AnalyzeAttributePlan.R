@@ -25,10 +25,11 @@
     acceptanceProbability * proportion * (lotSize - sampleSize) / lotSize else
     acceptanceProbability * sampleSize + (1 - acceptanceProbability) * lotSize
 
-  expect_identical(plot$data$PD, round(proportion, 3))
+  expect_identical(plot$data$PD, if (curve == "AOQ") proportion else round(proportion, 3))
   expect_length(plot$data$PA, length(acceptanceProbability))
   expect_lt(max(abs(plot$data$PA - acceptanceProbability)), 1e-10)
-  expect_equal(plot$data[[curve]], round(expectedCurve, 3), tolerance = 1e-12)
+  expectedCurve <- if (curve == "AOQ") expectedCurve else round(expectedCurve, 3)
+  expect_equal(plot$data[[curve]], expectedCurve, tolerance = 1e-12)
 }
 
 # Tests for Analyze Attribute Plan

@@ -35,6 +35,7 @@
 * State-space model selection now follows the covariate assignments. A saved beta analysis with a retained covariate assignment uses that covariate on recalculation, even if its old model selector was set to exclude predictors. Clear the assignment to fit the model without covariates.
 
 ## Fixed
+* Preserved full numerical precision in OC and AOQ curves, with significant-digit AOQL labels for small defect rates.
 * Variable sampling plans recalculate all affected outputs when the standard deviation assumption changes, and the decision explanation uses the selected historical or sample standard deviation.
 * Create Attribute Plan reports an error when the generated sample exceeds the lot size, instead of displaying an infeasible plan.
 * Aligned the Bayesian Sampling prior settings beside their choices in a compact layout. Inactive settings remain visible, with optional shape constraints and separate planning criteria.
