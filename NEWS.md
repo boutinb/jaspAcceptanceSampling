@@ -36,6 +36,8 @@
 
 ## Fixed
 * Preserved full numerical precision in OC and AOQ curves, with significant-digit AOQL labels for small defect rates.
+* Variable sampling plans recalculate all affected outputs when the standard deviation assumption changes, and the decision explanation uses the selected historical or sample standard deviation.
+* Create Attribute Plan reports an error when the generated sample exceeds the lot size, instead of displaying an infeasible plan.
 * Aligned the Bayesian Sampling prior settings beside their choices in a compact layout. Inactive settings remain visible, with optional shape constraints and separate planning criteria.
 * Unified the AQL/RQL labels and help in both Bayesian analyses, including the alternative term LTPD.
 * Standardized capitalization across analysis controls, help text, and output tables, and shortened the state-space summary group title to Selected Parameters.
