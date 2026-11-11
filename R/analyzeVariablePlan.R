@@ -29,7 +29,7 @@ AnalyzeVariablePlan <- function(jaspResults, dataset = NULL, options, ...) {
   # Check if the container already exists. Create it if it doesn't.
   if (is.null(jaspResults[["analyzeVarContainer"]]) || jaspResults[["analyzeVarContainer"]]$getError()) {
     analyzeVarContainer <- createJaspContainer(title = gettext("Analyze Variable Plan"))
-    analyzeVarContainer$dependOn(planVariables) # Common dependencies
+    analyzeVarContainer$dependOn(c(planVariables, "historicalSdKnown")) # Common dependencies
     jaspResults[["analyzeVarContainer"]] <- analyzeVarContainer
   } else {
     analyzeVarContainer <- jaspResults[["analyzeVarContainer"]]

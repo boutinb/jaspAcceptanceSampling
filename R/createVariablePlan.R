@@ -31,15 +31,19 @@ CreateVariablePlan <- function(jaspResults, dataset = NULL, options, ...) {
   if (is.null(jaspResults[["createVarContainer"]]) || jaspResults[["createVarContainer"]]$getError()) {
     createVarContainer <- createJaspContainer(title = gettext("Create Variable Plan"))
     # Common dependencies
-    createVarContainer$dependOn(riskVariables)
+    createVarContainer$dependOn(c(riskVariables, "historicalSdKnown"))
     jaspResults[["createVarContainer"]] <- createVarContainer
   } else {
     createVarContainer <- jaspResults[["createVarContainer"]]
   }
 
   # Description of the plan
-  planDescription <- createJaspHtml(text = gettext("Z.LSL = (mean - LSL) / historical standard deviation\n\nAccept lot if Z.LSL >= k, otherwise reject."),
-                           dependencies=riskVariables, position=1)
+  standardDeviationLabel <- if (options[["historicalSdKnown"]])
+    gettext("historical standard deviation") else gettext("sample standard deviation")
+  planDescription <- createJaspHtml(
+    text = gettextf("Z.LSL = (mean - LSL) / %s\n\nAccept lot if Z.LSL >= k, otherwise reject.",
+                    standardDeviationLabel),
+    dependencies = riskVariables, position = 1)
   createVarContainer[["decision_info"]] <- planDescription
 
   sd <- "unknown"
