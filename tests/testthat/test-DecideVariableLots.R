@@ -293,7 +293,7 @@ test_that("Decide lots - measurement assignment invalidates the lot container", 
   options$lowerSpecificationLimitValue <- 0
   options$historicalSdKnown <- FALSE
 
-  original <- getFromNamespace("DecideVariableLots", "jaspAcceptanceSampling")
+  original <- getFromNamespace("DecideVariableLotsInternal", "jaspAcceptanceSampling")
   createContainer <- get("createJaspContainer", asNamespace("jaspAcceptanceSampling"))
   declaredDependencies <- character()
   parsedOptionNames <- character()
@@ -333,7 +333,7 @@ test_that("Decide lots - measurement assignment invalidates the lot container", 
   }
   result <- testthat::with_mocked_bindings(
     jaspTools::runAnalysis("DecideVariableLots", "test.csv", options, view = FALSE),
-    DecideVariableLots = wrapper, createJaspContainer = factory,
+    DecideVariableLotsInternal = wrapper, createJaspContainer = factory,
     .package = "jaspAcceptanceSampling")
   expect_identical(result$status, "complete")
   expect_identical(list(

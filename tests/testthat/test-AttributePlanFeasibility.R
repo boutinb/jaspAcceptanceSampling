@@ -74,7 +74,7 @@ test_that("Create attribute plan clears an infeasible plan and recovers when the
   options <- .attributeFeasibilityOptionsForTest()
   options$distribution <- "binomial"
   options$lotSize <- 1000
-  original <- get("CreateAttributePlan", asNamespace("jaspAcceptanceSampling"))
+  original <- get("CreateAttributePlanInternal", asNamespace("jaspAcceptanceSampling"))
   observed <- list()
   wrapper <- function(jaspResults, dataset = NULL, options, ...) {
     private <- jaspResults$.__enclos_env__$private
@@ -100,7 +100,7 @@ test_that("Create attribute plan clears an infeasible plan and recovers when the
   }
   testthat::with_mocked_bindings(
     jaspTools::runAnalysis("CreateAttributePlan", dataset = NULL, options = options, view = FALSE),
-    CreateAttributePlan = wrapper, .package = "jaspAcceptanceSampling")
+    CreateAttributePlanInternal = wrapper, .package = "jaspAcceptanceSampling")
   expect_length(observed, 4L)
   .attributeExpectInfeasibleForTest(observed[[2L]]$results$createContainer, 110)
   for (i in c(1L, 3L, 4L)) {

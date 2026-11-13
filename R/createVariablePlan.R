@@ -22,7 +22,7 @@
 #' @param dataset {object} (optional) tabular data, if available for the analysis.
 #' @param options {list} A named list of interface options selected by the user.
 ##---------------------------------------------------------------
-CreateVariablePlan <- function(jaspResults, dataset = NULL, options, ...) {
+CreateVariablePlanInternal <- function(jaspResults, dataset = NULL, options, ...) {
   # Dependency variables
   riskVariables <- c("acceptableQualityLevel", "producerRisk", "rejectableQualityLevel", "consumerRisk")
   proportionVariables <- c("proportionNonconformingFrom", "proportionNonconformingTo", "proportionNonconformingStep")

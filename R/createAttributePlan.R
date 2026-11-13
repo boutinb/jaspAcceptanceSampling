@@ -23,7 +23,7 @@
 #' @param options {list} A named list of interface options selected by the user.
 #' @seealso .findPlan()
 ##---------------------------------------------------------------
-CreateAttributePlan <- function(jaspResults, dataset = NULL, options, ...) {
+CreateAttributePlanInternal <- function(jaspResults, dataset = NULL, options, ...) {
   # Constraints to create a plan
   riskVariables <- c("acceptableQualityLevel", "producerRisk", "rejectableQualityLevel", "consumerRisk")
   # Quality levels

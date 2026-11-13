@@ -23,7 +23,7 @@
 #' @param options {list} A named list of interface options selected by the user.
 #' @importFrom stats pnorm pbeta
 ##----------------------------------------------------------------
-DecideVariableLots <- function(jaspResults, dataset = NULL, options, ...) {
+DecideVariableLotsInternal <- function(jaspResults, dataset = NULL, options, ...) {
   dependencies <- c("measurement", "sampleStatistics", "sampleSize", "sampleMean", "sampleSd", "kValue", "lowerSpecificationLimit", "lowerSpecificationLimitValue", "upperSpecificationLimit", "upperSpecificationLimitValue", "historicalSdKnown", "historicalSd")
   riskVariables <- c("acceptableQualityLevel", "rejectableQualityLevel")
 

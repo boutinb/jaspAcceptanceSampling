@@ -14,12 +14,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-BayesianSSMforAS <- function(jaspResults, dataset = NULL, options, ...) {
+BayesianSSMforASInternal <- function(jaspResults, dataset = NULL, options, ...) {
   .asSSM_runAnalysis(jaspResults, dataset, options)
 }
 
 # Backward-compatible alias.
-bayesianSSMforAS <- BayesianSSMforAS
+bayesianSSMforAS <- BayesianSSMforASInternal
 
 .asSSM_runAnalysis <- function(jaspResults, dataset = NULL, options) {
 

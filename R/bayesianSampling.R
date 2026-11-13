@@ -18,7 +18,7 @@
 #' @export
 
 
-BayesianSampling <- function(jaspResults, dataset = NULL, options, ...) {
+BayesianSamplingInternal <- function(jaspResults, dataset = NULL, options, ...) {
 
   # 0. Introductory Procedure Text (Always shown up front)
   .bsCreateProcedure(jaspResults, options, position = 0)

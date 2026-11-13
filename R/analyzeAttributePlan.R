@@ -23,7 +23,7 @@
 #' @param options {list} A named list of interface options selected by the user.
 #' @seealso .handleAttributePlan()
 ##---------------------------------------------------------------
-AnalyzeAttributePlan <- function(jaspResults, dataset = NULL, options, ...) {
+AnalyzeAttributePlanInternal <- function(jaspResults, dataset = NULL, options, ...) {
   planVariables <- c("lotSize", "distribution")
   proportionVariables <- c("proportionNonconformingFrom", "proportionNonconformingTo", "proportionNonconformingStep")
 

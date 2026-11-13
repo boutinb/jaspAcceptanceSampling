@@ -28,7 +28,7 @@
 }
 
 .variableSdSequenceForTest <- function(analysis, options, changes = logical()) {
-  original <- get(analysis, asNamespace("jaspAcceptanceSampling"))
+  original <- get(paste0(analysis, "Internal"), asNamespace("jaspAcceptanceSampling"))
   containerKey <- if (analysis == "CreateVariablePlan") "createVarContainer" else "analyzeVarContainer"
   observed <- list()
   wrapper <- function(jaspResults, dataset = NULL, options, ...) {
@@ -60,9 +60,9 @@
     }
   }
   if (analysis == "CreateVariablePlan")
-    testthat::local_mocked_bindings(CreateVariablePlan = wrapper, .package = "jaspAcceptanceSampling")
+    testthat::local_mocked_bindings(CreateVariablePlanInternal = wrapper, .package = "jaspAcceptanceSampling")
   else
-    testthat::local_mocked_bindings(AnalyzeVariablePlan = wrapper, .package = "jaspAcceptanceSampling")
+    testthat::local_mocked_bindings(AnalyzeVariablePlanInternal = wrapper, .package = "jaspAcceptanceSampling")
   result <- jaspTools::runAnalysis(analysis, "test.csv", options, view = FALSE)
   expect_identical(result$status, "complete")
   expect_length(observed, length(changes) + 1L)

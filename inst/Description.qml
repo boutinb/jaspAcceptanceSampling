@@ -7,7 +7,7 @@ Description
 	description	: qsTr("Sampling for acceptance")
 	icon		: "acceptance_sampling.svg"
 	requiresData: false
-	hasWrappers:  false
+	hasWrappers:  true
 	preloadData:  false
 	
 

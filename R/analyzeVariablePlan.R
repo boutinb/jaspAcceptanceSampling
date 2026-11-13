@@ -22,7 +22,7 @@
 #' @param dataset {object} (optional) tabular data, if available for the analysis.
 #' @param options {list} A named list of interface options selected by the user.
 ##----------------------------------------------------------------
-AnalyzeVariablePlan <- function(jaspResults, dataset = NULL, options, ...) {
+AnalyzeVariablePlanInternal <- function(jaspResults, dataset = NULL, options, ...) {
   # Dependency variables
   planVariables <- c("sampleSize", "kValue")
 
